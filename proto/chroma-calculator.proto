@@ -6,11 +6,20 @@ option go_package = "./pb";
 
 message CalculationRequest {
   int64 number_of_vectors = 1;
-  int64 dimension_of_vectors = 2;
+  int64 vector_dimensions = 2;
+}
+
+enum EstimateUnit {
+  BYTE = 0;
+  KILOBYTE = 1;
+  MEGABYTE = 2;
+  GIGABYTE = 3;
+  TERABYTE = 4;
 }
 
 message CalculationResponse {
-  float result = 1;
+  float memory_size_estimate = 1;
+  EstimateUnit estimate_unit = 2;
 }
 
 service CalculatorService {

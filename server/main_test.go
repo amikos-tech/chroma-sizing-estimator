@@ -44,11 +44,14 @@ func TestCalculate(t *testing.T) {
 		}
 	}(conn)
 	client := pb.NewCalculatorServiceClient(conn)
-	resp, err := client.Calculate(ctx, &pb.CalculationRequest{NumberOfVectors: 2, DimensionOfVectors: 2})
+	resp, err := client.Calculate(ctx, &pb.CalculationRequest{NumberOfVectors: 2, VectorDimensions: 2})
 	if err != nil {
 		t.Fatalf("Calculate failed: %v", err)
 	}
-	if resp.Result != float32(4*2*2)/1024/1024/1024 {
-		t.Fatalf("unexpected response: %v", resp.Result)
+	if resp.GetMemorySizeEstimate() != float32(4*2*2)/1024/1024/1024 {
+		t.Fatalf("unexpected response: %v", resp.MemorySizeEstimate)
+	}
+	if resp.GetEstimateUnit() != pb.EstimateUnit_GIGABYTE {
+		t.Fatalf("unexpected response: %v", resp.EstimateUnit)
 	}
 }
