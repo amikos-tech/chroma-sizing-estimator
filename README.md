@@ -41,6 +41,7 @@ Should return:
 
 ```json
 {
-  "result": 0.47683716
+  "memorySizeEstimate": 0.47683716,
+  "estimateUnit": "GIGABYTE"
 }
 ```

@@ -26,13 +26,14 @@ func (s *server) Calculate(
 			codes.InvalidArgument, "At least one vector is required",
 		)
 	}
-	if in.DimensionOfVectors <= 0 {
+	if in.VectorDimensions <= 0 {
 		return nil, status.Errorf(
 			codes.InvalidArgument, "Dimension of vectors must be positive",
 		)
 	}
 	return &pb.CalculationResponse{
-		Result: float32(4*in.NumberOfVectors*in.DimensionOfVectors) / 1024 / 1024 / 1024,
+		MemorySizeEstimate: float32(4*in.NumberOfVectors*in.VectorDimensions) / 1024 / 1024 / 1024,
+		EstimateUnit:       pb.EstimateUnit_GIGABYTE,
 	}, nil
 }
 
