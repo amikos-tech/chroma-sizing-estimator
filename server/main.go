@@ -31,9 +31,15 @@ func (s *server) Calculate(
 			codes.InvalidArgument, "Dimension of vectors must be positive",
 		)
 	}
+	var systemMemoryOverhead float32 = 0.2
+	if in.SystemMemoryOverhead != nil {
+		systemMemoryOverhead = *in.SystemMemoryOverhead
+	}
+	var binaryIndexEstimate = float32(4*in.NumberOfVectors*in.VectorDimensions) / 1024 / 1024 / 1024
+	var memorySizeEstimate = binaryIndexEstimate * (1 + systemMemoryOverhead)
 	return &pb.CalculationResponse{
-		MemorySizeEstimate: float32(4*in.NumberOfVectors*in.VectorDimensions) / 1024 / 1024 / 1024,
-		EstimateUnit:       pb.EstimateUnit_GIGABYTE,
+		MemorySizeEstimate: memorySizeEstimate,
+		EstimateUnit:       pb.EstimateUnit_GB,
 	}, nil
 }
 

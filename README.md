@@ -31,10 +31,10 @@ make docker-run
 
 ### Testing
 
-With grpcurl:
+Testing with System Buffer Memory Size (20% of total memory):
 
 ```bash
-grpcurl -plaintext -d '{"number_of_vectors": 1000000, "dimension_of_vectors": 128}' localhost:8080 calculator.CalculatorService/Calculate
+grpcurl -plaintext -d '{"number_of_vectors": 1000000, "vector_dimensions": 128}' localhost:8080 calculator.CalculatorService/Calculate
 ```
 
 Should return:
@@ -42,6 +42,22 @@ Should return:
 ```json
 {
   "memorySizeEstimate": 0.47683716,
-  "estimateUnit": "GIGABYTE"
+  "estimateUnit": "GB"
 }
 ```
+
+Testing with System Buffer Memory Size (30% of total memory):
+
+```bash
+grpcurl -plaintext -d '{"number_of_vectors": 1000000, "vector_dimensions": 128, "system_memory_overhead": 0.3}' localhost:8080 calculator.CalculatorService/Calculate
+```
+
+Should return:
+
+```json
+{
+  "memorySizeEstimate": 0.6198883,
+  "estimateUnit": "GB"
+}
+```
+
