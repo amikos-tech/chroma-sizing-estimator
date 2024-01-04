@@ -44,14 +44,31 @@ func TestCalculate(t *testing.T) {
 		}
 	}(conn)
 	client := pb.NewCalculatorServiceClient(conn)
-	resp, err := client.Calculate(ctx, &pb.CalculationRequest{NumberOfVectors: 2, VectorDimensions: 2})
-	if err != nil {
-		t.Fatalf("Calculate failed: %v", err)
-	}
-	if resp.GetMemorySizeEstimate() != float32(4*2*2)/1024/1024/1024 {
-		t.Fatalf("unexpected response: %v", resp.MemorySizeEstimate)
-	}
-	if resp.GetEstimateUnit() != pb.EstimateUnit_GIGABYTE {
-		t.Fatalf("unexpected response: %v", resp.EstimateUnit)
-	}
+
+	t.Run("Test Calculate With Default System Buffer Memory", func(t *testing.T) {
+		resp, err := client.Calculate(ctx, &pb.CalculationRequest{NumberOfVectors: 2, VectorDimensions: 2})
+		if err != nil {
+			t.Fatalf("Calculate failed: %v", err)
+		}
+		if resp.GetMemorySizeEstimate() != (float32(4*2*2)/1024/1024/1024)*(1+0.2) {
+			t.Fatalf("unexpected response: %v", resp.MemorySizeEstimate)
+		}
+		if resp.GetEstimateUnit() != pb.EstimateUnit_GB {
+			t.Fatalf("unexpected response: %v", resp.EstimateUnit)
+		}
+	})
+
+	t.Run("Test Calculate With Custom System Buffer Memory", func(t *testing.T) {
+		systemMemoryOverhead := float32(0.3)
+		resp, err := client.Calculate(ctx, &pb.CalculationRequest{NumberOfVectors: 2, VectorDimensions: 2, SystemMemoryOverhead: &systemMemoryOverhead})
+		if err != nil {
+			t.Fatalf("Calculate failed: %v", err)
+		}
+		if resp.GetMemorySizeEstimate() != (float32(4*2*2)/1024/1024/1024)*(1+systemMemoryOverhead) {
+			t.Fatalf("unexpected response: %v", resp.MemorySizeEstimate)
+		}
+		if resp.GetEstimateUnit() != pb.EstimateUnit_GB {
+			t.Fatalf("unexpected response: %v", resp.EstimateUnit)
+		}
+	})
 }

@@ -7,14 +7,15 @@ option go_package = "./pb";
 message CalculationRequest {
   int64 number_of_vectors = 1;
   int64 vector_dimensions = 2;
+  optional float system_memory_overhead = 3;
 }
 
 enum EstimateUnit {
-  BYTE = 0;
-  KILOBYTE = 1;
-  MEGABYTE = 2;
-  GIGABYTE = 3;
-  TERABYTE = 4;
+  byte = 0;
+  KB = 1;
+  MB = 2;
+  GB = 3;
+  TB = 4;
 }
 
 message CalculationResponse {
