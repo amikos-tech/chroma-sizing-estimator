@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package calculator;
+
+option go_package = "./pb";
+
+message CalculationRequest {
+  int64 number_of_vectors = 1;
+  int64 dimension_of_vectors = 2;
+}
+
+message CalculationResponse {
+  float result = 1;
+}
+
+service CalculatorService {
+  rpc Calculate(CalculationRequest) returns (CalculationResponse);
+}
