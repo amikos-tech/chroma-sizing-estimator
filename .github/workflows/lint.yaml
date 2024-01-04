@@ -1,10 +1,10 @@
-name: Chroma Sizing Estimator Release
+name: Go Lint
 
 on:
   push: {}
 
 jobs:
-  build-and-release:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
