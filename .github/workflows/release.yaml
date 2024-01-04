@@ -47,6 +47,6 @@ jobs:
           push: true
           tags: |
             ${{ env.GHCR_IMAGE_NAME }}:latest
-            ${{ env.GHCR_IMAGE_NAME }}:${{ github.ref }}
+            ${{ env.GHCR_IMAGE_NAME }}:${GITHUB_REF#refs/tags/}
             ${{ env.DOCKERHUB_IMAGE_NAME }}:latest
-            ${{ env.DOCKERHUB_IMAGE_NAME }}:${{ github.ref }}
+            ${{ env.DOCKERHUB_IMAGE_NAME }}:${GITHUB_REF#refs/tags/}
